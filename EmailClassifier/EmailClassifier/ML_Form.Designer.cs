@@ -1,14 +1,14 @@
 ﻿namespace EmailClassifier
 {
     [System.ComponentModel.ToolboxItemAttribute(false)]
-    partial class ML_Form : Microsoft.Office.Tools.Outlook.FormRegionBase
+    public partial class ML_Form : Microsoft.Office.Tools.Outlook.FormRegionBase
     {
         private System.Windows.Forms.CheckBox CB_addToTrainingData;
         private System.Windows.Forms.Button button_trainModel;
 
         private System.Windows.Forms.GroupBox groupBox_classifications;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button button_read;
+        public System.Windows.Forms.Button button_read;
         private System.Windows.Forms.Button button_ignore;
         private System.Windows.Forms.Button button_delete;
         private System.Windows.Forms.Button button_followUp;

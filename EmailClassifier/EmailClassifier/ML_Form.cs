@@ -7,8 +7,9 @@ using Outlook = Microsoft.Office.Interop.Outlook;
 
 namespace EmailClassifier
 {
-    partial class ML_Form
+    public partial class ML_Form
     {
+
         #region Form Region Factory 
 
         [Microsoft.Office.Tools.Outlook.FormRegionMessageClass(Microsoft.Office.Tools.Outlook.FormRegionMessageClassAttribute.Note)]
@@ -65,6 +66,7 @@ namespace EmailClassifier
             }
         }
 
+        public string ButtonText { get { return this.button_read.Text; } set { this.button_read.Text = value; } }
 
     }
 }

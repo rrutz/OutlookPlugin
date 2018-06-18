@@ -10,8 +10,14 @@ namespace EmailClassifier
 {
     public partial class ThisAddIn
     {
+
+        Outlook.Explorer thisExplorer;
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            thisExplorer = this.Application.ActiveExplorer();
+            thisExplorer.SelectionChange += new Microsoft.Office.Interop.Outlook.ExplorerEvents_10_SelectionChangeEventHandler(Access_All_Form_Regions);
+ 
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
@@ -23,8 +29,6 @@ namespace EmailClassifier
         public void writeToFile(string text)
         {
             String path = @"C:\Users\Ruedi\OneDrive\OutlookPlugin\OutlookPlugin\EmailClassifier\test.txt";
-
-            
             if (this.Application.ActiveExplorer().Selection.Count > 0)
             {
                 Object selObject = this.Application.ActiveExplorer().Selection[1];
@@ -32,7 +36,7 @@ namespace EmailClassifier
                 {
                     Outlook.MailItem mailItem = (selObject as Outlook.MailItem);
                     String itemMessage = mailItem.Subject;
-                    mailItem.Display(true);
+
                     if (!System.IO.File.Exists(path))
                     {
                         using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
@@ -51,6 +55,23 @@ namespace EmailClassifier
                 }
             }
         }
+
+
+
+        private void Access_All_Form_Regions()
+        {
+            foreach (Microsoft.Office.Tools.Outlook.IFormRegion formRegion in Globals.FormRegions)
+            {
+                if (formRegion is ML_Form)
+                {
+                    ML_Form formRegion1 = (ML_Form)formRegion;
+                    formRegion1.button_read.Text = "wwwwwwww";
+                }
+            }
+
+        }
+
+
 
         #region VSTO generated code
 
