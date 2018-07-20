@@ -65,6 +65,38 @@ namespace EmailClassifier
                 Globals.ThisAddIn.writeToFile(this.button_read.Text);
             }
         }
+        
+        private void button_read_Click(object sender, System.EventArgs e)
+        {
+            if (isClicked)
+            { 
+                Globals.ThisAddIn.writeToFile(this.button_read.Text);
+            }
+        }
+        
+        private void button_read_Click(object sender, System.EventArgs e)
+        {
+            if (isClicked)
+            { 
+                Globals.ThisAddIn.writeToFile(this.button_read.Text);
+            }
+        }
+        
+        private void button_read_Click(object sender, System.EventArgs e)
+        {
+            if (isClicked)
+            { 
+                Globals.ThisAddIn.writeToFile(this.button_read.Text);
+            }
+        }
+        
+        private void button_read_Click(object sender, System.EventArgs e)
+        {
+            if (isClicked)
+            { 
+                Globals.ThisAddIn.writeToFile(this.button_read.Text);
+            }
+        }
 
         public string ButtonText { get { return this.button_read.Text; } set { this.button_read.Text = value; } }
 
