@@ -1,0 +1,2 @@
+1. make make ML model that sleeps and then writes dummy parmaters to a file. C# will call this, and it should work in the background
+2. when email clicked on, C# should pass input to R program, which predicts and returns prediciton. The C# code then updates email
