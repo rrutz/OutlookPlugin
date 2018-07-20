@@ -26,7 +26,7 @@ namespace EmailClassifier
             //    must run when Outlook shuts down, see https://go.microsoft.com/fwlink/?LinkId=506785
         }
 
-        public void writeToFile(string text)
+        public void writeToFile(string text, bool writeToFile)
         {
             String path = @"C:\Users\Ruedi\OneDrive\OutlookPlugin\OutlookPlugin\EmailClassifier\test.txt";
             if (this.Application.ActiveExplorer().Selection.Count > 0)
@@ -37,21 +37,25 @@ namespace EmailClassifier
                     Outlook.MailItem mailItem = (selObject as Outlook.MailItem);
                     String itemMessage = mailItem.Subject;
 
-                    if (!System.IO.File.Exists(path))
+                    if ( writeToFile )
                     {
-                        using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
-                        { 
-                            sw.WriteLine("Sender, Header, Receiver");
-                            sw.WriteLine(itemMessage);
-                        }
-                    }
-                    else
-                    {
-                        using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+                        if (!System.IO.File.Exists(path))
                         {
-                            sw.WriteLine(itemMessage);
+                            using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+                            { 
+                                sw.WriteLine("Sender, Header, Receiver");
+                                sw.WriteLine(itemMessage);
+                            }
+                        }
+                        else
+                        {
+                            using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+                            {
+                                sw.WriteLine(itemMessage);
+                            }
                         }
                     }
+                    // call R function
                 }
             }
         }
