@@ -5,6 +5,7 @@ using System.Text;
 using Office = Microsoft.Office.Core;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using System.Drawing;
+using System.Threading;
 
 namespace EmailClassifier
 {
@@ -40,10 +41,15 @@ namespace EmailClassifier
         private void FormRegion1_FormRegionClosed(object sender, System.EventArgs e)
         {
         }
+        private void threadFunction()
+        { 
+            Globals.ThisAddIn.classifyEmail(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\EmailClassifier\FitModel.r.r", @"C:\Program Files\Microsoft\R Client\R_SERVER\bin\Rscript.exe");
+        }
 
         private void Button_trainModel_Click( object sender, System.EventArgs e)
         {
-            this.prediction = Globals.ThisAddIn.classifyEmail(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\EmailClassifier\FitModel.r", @"C:\Program Files\Microsoft\R Client\R_SERVER\bin\Rscript.exe");
+            Thread th = new Thread(threadFunction);
+            th.Start();
         }
 
         private void button_read_Click(object sender, System.EventArgs e)

@@ -13,8 +13,6 @@ namespace EmailClassifier
         private System.Windows.Forms.Button button_ignore;
         private System.Windows.Forms.Button button_delete;
         private System.Windows.Forms.Button button_followUp;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
         private string prediction; 
 
 
@@ -57,8 +55,6 @@ namespace EmailClassifier
             this.button_ignore = new System.Windows.Forms.Button();
             this.button_delete = new System.Windows.Forms.Button();
             this.button_followUp = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.groupBox_classifications.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -94,8 +90,6 @@ namespace EmailClassifier
             this.tableLayoutPanel1.Controls.Add(this.button_ignore, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.button_delete, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.button_followUp, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.button5, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.button4, 2, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(17, 30);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
@@ -144,23 +138,6 @@ namespace EmailClassifier
             this.button_followUp.Text = "Follow Up";
             this.button_followUp.UseVisualStyleBackColor = true;
             this.button_followUp.Click += new System.EventHandler(this.button_followUp_Click);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(857, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 3;
-            this.button5.Text = "button5";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(857, 42);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "button4";
 
             // 
             // preicition

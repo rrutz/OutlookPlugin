@@ -52,7 +52,6 @@ namespace EmailClassifier
 
                     using (TextWriter writer = new StreamWriter(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv", append: true))
                     {
-                        
                         var csv = new CsvWriter(writer);
                         var list = new List<string[]>
                         {
@@ -94,26 +93,21 @@ namespace EmailClassifier
                 string file = rCodeFilePath;
                 string result;
 
-
                 info.FileName = rScriptExecutablePath;
                 info.WorkingDirectory = Path.GetDirectoryName(rScriptExecutablePath);
-
                 info.RedirectStandardInput = false;
                 info.RedirectStandardOutput = true;
                 info.UseShellExecute = false;
                 info.CreateNoWindow = true;
-
-
                 using (var proc = new Process())
                 {
                     proc.StartInfo = info;
                     proc.Start();
                     result = proc.StandardOutput.ReadToEnd();
                 }
-
                 return result;
             }
-            return "eee";
+            return "error";
         }
 
         private void Access_All_Form_Regions()
@@ -125,9 +119,7 @@ namespace EmailClassifier
                     ML_Form formRegion1 = (ML_Form)formRegion;
                 }
             }
-
         }
-
 
 
         #region VSTO generated code

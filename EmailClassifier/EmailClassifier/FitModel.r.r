@@ -41,8 +41,8 @@ words.freq <- getFreq("Delete", words.freq)
 words.freq <- getFreq("Follow Up", words.freq)
 
 colnames(words.freq) <- c( "word", "totalCount", "readFreq", "deleteFreq", " followUpFreq")
-words.freq[is.na(words.freq)] <- 0
+words.freq[is.na(words.freq)] <- 1
 
 write.csv(x = words.freq, file = "C:\\Users\\Ruedi\\OneDrive\\MS\\OutlookPlugin\\EmailClassifier\\pamramters.csv", row.names = FALSE)
 
-
+Sys.sleep(10)
