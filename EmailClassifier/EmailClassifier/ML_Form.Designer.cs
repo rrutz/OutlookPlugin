@@ -1,9 +1,10 @@
-﻿namespace EmailClassifier
+﻿using System.Windows.Media;
+
+namespace EmailClassifier
 {
     [System.ComponentModel.ToolboxItemAttribute(false)]
     public partial class ML_Form : Microsoft.Office.Tools.Outlook.FormRegionBase
     {
-        private System.Windows.Forms.CheckBox CB_addToTrainingData;
         private System.Windows.Forms.Button button_trainModel;
 
         private System.Windows.Forms.GroupBox groupBox_classifications;
@@ -14,6 +15,7 @@
         private System.Windows.Forms.Button button_followUp;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button4;
+        private string prediction; 
 
 
         public ML_Form(Microsoft.Office.Interop.Outlook.FormRegion formRegion)
@@ -48,7 +50,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.CB_addToTrainingData = new System.Windows.Forms.CheckBox();
             this.button_trainModel = new System.Windows.Forms.Button();
             this.groupBox_classifications = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -61,18 +62,7 @@
             this.groupBox_classifications.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // CB_addToTrainingData
-            // 
-            this.CB_addToTrainingData.AutoSize = true;
-            this.CB_addToTrainingData.Location = new System.Drawing.Point(24, 12);
-            this.CB_addToTrainingData.Name = "CB_addToTrainingData";
-            this.CB_addToTrainingData.Size = new System.Drawing.Size(124, 17);
-            this.CB_addToTrainingData.TabIndex = 1;
-            this.CB_addToTrainingData.Text = "Add to Training Data";
-            this.CB_addToTrainingData.UseVisualStyleBackColor = true;
-            this.CB_addToTrainingData.CheckedChanged += new System.EventHandler(CB_addToTrainingData_Click);
-            // 
+
             // button_trainModel
             // 
             this.button_trainModel.Location = new System.Drawing.Point(1035, 12);
@@ -122,8 +112,8 @@
             this.button_read.Size = new System.Drawing.Size(75, 23);
             this.button_read.TabIndex = 7;
             this.button_read.Text = "Read";
-            this.button_read.UseVisualStyleBackColor = true;
-            this.button_read.Click += new System.EventHandler(button_read_Click);
+            this.button_read.UseVisualStyleBackColor = false;
+            this.button_read.Click += new System.EventHandler(this.button_read_Click);
             // 
             // button_ignore
             // 
@@ -133,6 +123,7 @@
             this.button_ignore.TabIndex = 6;
             this.button_ignore.Text = "Ignore";
             this.button_ignore.UseVisualStyleBackColor = true;
+            this.button_ignore.Click += new System.EventHandler(this.button_ignore_Click);
             // 
             // button_delete
             // 
@@ -142,6 +133,7 @@
             this.button_delete.TabIndex = 5;
             this.button_delete.Text = "Delete";
             this.button_delete.UseVisualStyleBackColor = true;
+            this.button_delete.Click += new System.EventHandler(this.button_delete_Click);
             // 
             // button_followUp
             // 
@@ -151,6 +143,7 @@
             this.button_followUp.TabIndex = 4;
             this.button_followUp.Text = "Follow Up";
             this.button_followUp.UseVisualStyleBackColor = true;
+            this.button_followUp.Click += new System.EventHandler(this.button_followUp_Click);
             // 
             // button5
             // 
@@ -168,7 +161,28 @@
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 2;
             this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
+
+            // 
+            // preicition
+            // 
+            this.prediction = Globals.ThisAddIn.classifyEmail(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\EmailClassifier\predict.r.r", @"C:\Program Files\Microsoft\R Client\R_SERVER\bin\Rscript.exe");
+            switch (this.prediction)
+            {
+                case "read":
+                    this.button_read.BackColor = System.Drawing.SystemColors.Highlight;
+                    break;
+                case "ignore":
+                    this.button_ignore.BackColor = System.Drawing.SystemColors.Highlight;
+                    break;
+                case "delete":
+                    this.button_delete.BackColor = System.Drawing.SystemColors.Highlight;
+                    break;
+                case "followUp":
+                    this.button_followUp.BackColor = System.Drawing.SystemColors.Highlight;
+                    break;
+                default:
+                    break;
+            }
             // 
             // ML_Form
             // 
@@ -177,7 +191,6 @@
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Controls.Add(this.groupBox_classifications);
             this.Controls.Add(this.button_trainModel);
-            this.Controls.Add(this.CB_addToTrainingData);
             this.Name = "ML_Form";
             this.Size = new System.Drawing.Size(1128, 162);
             this.FormRegionShowing += new System.EventHandler(this.FormRegion1_FormRegionShowing);

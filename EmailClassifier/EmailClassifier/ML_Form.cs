@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Office = Microsoft.Office.Core;
 using Outlook = Microsoft.Office.Interop.Outlook;
+using System.Drawing;
 
 namespace EmailClassifier
 {
@@ -42,63 +43,29 @@ namespace EmailClassifier
 
         private void Button_trainModel_Click( object sender, System.EventArgs e)
         {
-            // this.button_trainModel.Text = Convert.ToString(isClicked);
-        }
-
-        bool isClicked = false;
-        private void CB_addToTrainingData_Click( object sender, System.EventArgs e)
-        {
-            if (isClicked)
-            {
-                isClicked = false;
-            }
-            else
-            {
-                isClicked = true;
-            }
+            this.prediction = Globals.ThisAddIn.classifyEmail(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\EmailClassifier\FitModel.r", @"C:\Program Files\Microsoft\R Client\R_SERVER\bin\Rscript.exe");
         }
 
         private void button_read_Click(object sender, System.EventArgs e)
         {
-            if (isClicked)
-            { 
-                Globals.ThisAddIn.writeToFile(this.button_read.Text);
-            }
+            Globals.ThisAddIn.writeToFile(this.button_read.Text);
         }
-        
-        private void button_read_Click(object sender, System.EventArgs e)
+
+        private void button_delete_Click(object sender, System.EventArgs e)
         {
-            if (isClicked)
-            { 
-                Globals.ThisAddIn.writeToFile(this.button_read.Text);
-            }
+            Globals.ThisAddIn.writeToFile(this.button_read.Text);
         }
-        
-        private void button_read_Click(object sender, System.EventArgs e)
+
+        private void button_ignore_Click(object sender, System.EventArgs e)
         {
-            if (isClicked)
-            { 
-                Globals.ThisAddIn.writeToFile(this.button_read.Text);
-            }
+            Globals.ThisAddIn.writeToFile(this.button_read.Text);
         }
-        
-        private void button_read_Click(object sender, System.EventArgs e)
+
+        private void button_followUp_Click(object sender, System.EventArgs e)
         {
-            if (isClicked)
-            { 
-                Globals.ThisAddIn.writeToFile(this.button_read.Text);
-            }
-        }
-        
-        private void button_read_Click(object sender, System.EventArgs e)
-        {
-            if (isClicked)
-            { 
-                Globals.ThisAddIn.writeToFile(this.button_read.Text);
-            }
+            Globals.ThisAddIn.writeToFile(this.button_read.Text);
         }
 
         public string ButtonText { get { return this.button_read.Text; } set { this.button_read.Text = value; } }
-
     }
 }

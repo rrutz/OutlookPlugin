@@ -5,6 +5,9 @@ using System.Text;
 using System.Xml.Linq;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
+using System.Diagnostics;
+using System.IO;
+using CsvHelper;
 
 namespace EmailClassifier
 {
@@ -12,12 +15,12 @@ namespace EmailClassifier
     {
 
         Outlook.Explorer thisExplorer;
+       
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             thisExplorer = this.Application.ActiveExplorer();
             thisExplorer.SelectionChange += new Microsoft.Office.Interop.Outlook.ExplorerEvents_10_SelectionChangeEventHandler(Access_All_Form_Regions);
- 
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
@@ -26,36 +29,74 @@ namespace EmailClassifier
             //    must run when Outlook shuts down, see https://go.microsoft.com/fwlink/?LinkId=506785
         }
 
-        public void writeToFile(string text)
+        public class Row
         {
-            String path = @"C:\Users\Ruedi\OneDrive\OutlookPlugin\OutlookPlugin\EmailClassifier\test.txt";
+            public String from;
+            public String to;
+            public String body;
+        }
+
+        public void writeToFile(string text)
+        { 
             if (this.Application.ActiveExplorer().Selection.Count > 0)
             {
                 Object selObject = this.Application.ActiveExplorer().Selection[1];
                 if (selObject is Outlook.MailItem)
                 {
                     Outlook.MailItem mailItem = (selObject as Outlook.MailItem);
-                    String itemMessage = mailItem.Subject;
-                    if (!System.IO.File.Exists(path))
+                    String from = mailItem.SenderName;
+                    String to = mailItem.To;
+                    String cc = mailItem.CC;
+                    String subject = mailItem.Subject;
+                    String body = mailItem.Body;
+
+                    using (TextWriter writer = new StreamWriter(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv", append: true))
                     {
-                        using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
-                        { 
-                            sw.WriteLine("Sender, Header, Receiver");
-                            sw.WriteLine(itemMessage);
-                        }
-                    }
-                    else
-                    {
-                        using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+                        
+                        var csv = new CsvWriter(writer);
+                        var list = new List<string[]>
                         {
-                            sw.WriteLine(itemMessage);
+                            new[] { from, body },
+                        };
+                        foreach (var item in list)
+                        {
+                            foreach (var field in item)
+                            {
+                                csv.WriteField(field);
+                            }
+                            csv.NextRecord();
                         }
+                        writer.Flush();
                     }
                 }
             }
         }
 
 
+
+        public string classifyEmail(string rCodeFilePath, string rScriptExecutablePath)
+        {
+            string file = rCodeFilePath;
+            string result;
+
+            var info = new ProcessStartInfo();
+            info.FileName = rScriptExecutablePath;
+            info.WorkingDirectory = Path.GetDirectoryName(rScriptExecutablePath);
+            info.Arguments = rCodeFilePath + " ";
+            info.RedirectStandardInput = false;
+            info.RedirectStandardOutput = true;
+            info.UseShellExecute = false;
+            info.CreateNoWindow = true;
+
+            using (var proc = new Process())
+            {
+                proc.StartInfo = info;
+                proc.Start();
+                result = proc.StandardOutput.ReadToEnd();
+            }
+           
+            return result;
+        }
 
         private void Access_All_Form_Regions()
         {
@@ -64,7 +105,6 @@ namespace EmailClassifier
                 if (formRegion is ML_Form)
                 {
                     ML_Form formRegion1 = (ML_Form)formRegion;
-                    formRegion1.button_read.Text = "wwwwwwww";
                 }
             }
 
@@ -86,4 +126,8 @@ namespace EmailClassifier
         
         #endregion
     }
+
+
 }
+
+
