@@ -53,17 +53,17 @@ namespace EmailClassifier
 
         private void button_delete_Click(object sender, System.EventArgs e)
         {
-            Globals.ThisAddIn.writeToFile(this.button_read.Text);
+            Globals.ThisAddIn.writeToFile(this.button_delete.Text);
         }
 
         private void button_ignore_Click(object sender, System.EventArgs e)
         {
-            Globals.ThisAddIn.writeToFile(this.button_read.Text);
+            Globals.ThisAddIn.writeToFile(this.button_ignore.Text);
         }
 
         private void button_followUp_Click(object sender, System.EventArgs e)
         {
-            Globals.ThisAddIn.writeToFile(this.button_read.Text);
+            Globals.ThisAddIn.writeToFile(this.button_followUp.Text);
         }
 
         public string ButtonText { get { return this.button_read.Text; } set { this.button_read.Text = value; } }

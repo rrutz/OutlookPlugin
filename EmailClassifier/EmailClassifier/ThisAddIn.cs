@@ -56,7 +56,7 @@ namespace EmailClassifier
                         var csv = new CsvWriter(writer);
                         var list = new List<string[]>
                         {
-                            new[] { from, body },
+                            new[] { text, from, body },
                         };
                         foreach (var item in list)
                         {
@@ -76,26 +76,44 @@ namespace EmailClassifier
 
         public string classifyEmail(string rCodeFilePath, string rScriptExecutablePath)
         {
-            string file = rCodeFilePath;
-            string result;
-
-            var info = new ProcessStartInfo();
-            info.FileName = rScriptExecutablePath;
-            info.WorkingDirectory = Path.GetDirectoryName(rScriptExecutablePath);
-            info.Arguments = rCodeFilePath + " ";
-            info.RedirectStandardInput = false;
-            info.RedirectStandardOutput = true;
-            info.UseShellExecute = false;
-            info.CreateNoWindow = true;
-
-            using (var proc = new Process())
+            if (this.Application.ActiveExplorer().Selection.Count > 0)
             {
-                proc.StartInfo = info;
-                proc.Start();
-                result = proc.StandardOutput.ReadToEnd();
+                var info = new ProcessStartInfo();
+                Object selObject = this.Application.ActiveExplorer().Selection[1];
+                if (selObject is Outlook.MailItem)
+                {
+                    Outlook.MailItem mailItem = (selObject as Outlook.MailItem);
+                    String from = mailItem.SenderName;
+                    String to = mailItem.To;
+                    String cc = mailItem.CC;
+                    String subject = mailItem.Subject;
+                    String body = mailItem.Body;
+                    info.Arguments = rCodeFilePath + " " + "\"" + body + "\"";
+                }
+
+                string file = rCodeFilePath;
+                string result;
+
+
+                info.FileName = rScriptExecutablePath;
+                info.WorkingDirectory = Path.GetDirectoryName(rScriptExecutablePath);
+
+                info.RedirectStandardInput = false;
+                info.RedirectStandardOutput = true;
+                info.UseShellExecute = false;
+                info.CreateNoWindow = true;
+
+
+                using (var proc = new Process())
+                {
+                    proc.StartInfo = info;
+                    proc.Start();
+                    result = proc.StandardOutput.ReadToEnd();
+                }
+
+                return result;
             }
-           
-            return result;
+            return "eee";
         }
 
         private void Access_All_Form_Regions()
