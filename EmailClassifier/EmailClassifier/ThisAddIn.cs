@@ -13,10 +13,8 @@ namespace EmailClassifier
 {
     public partial class ThisAddIn
     {
-
         Outlook.Explorer thisExplorer;
-       
-
+   
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             thisExplorer = this.Application.ActiveExplorer();
@@ -29,14 +27,7 @@ namespace EmailClassifier
             //    must run when Outlook shuts down, see https://go.microsoft.com/fwlink/?LinkId=506785
         }
 
-        public class Row
-        {
-            public String from;
-            public String to;
-            public String body;
-        }
-
-        public void writeToFile(string text)
+        public void writeToFile(string label)
         { 
             if (this.Application.ActiveExplorer().Selection.Count > 0)
             {
@@ -50,12 +41,33 @@ namespace EmailClassifier
                     String subject = mailItem.Subject;
                     String body = mailItem.Body;
 
+                    if( Console.WriteLine(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv"))
+                    {
+                        using (TextWriter writer = new StreamWriter(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv", append: true))
+                        {
+                            var csv = new CsvWriter(writer);
+                            var list = new List<string[]>
+                            {
+                                new[] { "label", "from", "to", "cc", "subject", "body" },
+                            };
+                            foreach (var item in list)
+                            {
+                                foreach (var field in item)
+                                {
+                                    csv.WriteField(field);
+                                }
+                                csv.NextRecord();
+                            }
+                            writer.Flush();
+                        }
+                    }
+                       
                     using (TextWriter writer = new StreamWriter(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv", append: true))
                     {
                         var csv = new CsvWriter(writer);
                         var list = new List<string[]>
                         {
-                            new[] { text, from, body },
+                            new[] { label, from, to, cc, subject, body },
                         };
                         foreach (var item in list)
                         {
@@ -136,8 +148,6 @@ namespace EmailClassifier
         
         #endregion
     }
-
-
 }
 
 
