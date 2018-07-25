@@ -5,7 +5,9 @@ body <- args[1]
 words <- as.data.frame(strsplit(body, split = " ")[[1]] )
 colnames(words) <- c("word")
 probs <- merge(x=words,y=par, by = "word", all.x=TRUE )[, c(3:5)]
-probs[is.na(probs)] <- 1
+probs[is.na(probs)] <- 0.5
+
+
 
 pred <- which.max(sapply(probs, FUN=prod))
 if ( length(pred ) == 0 )
