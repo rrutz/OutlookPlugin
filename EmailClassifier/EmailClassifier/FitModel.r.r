@@ -30,7 +30,8 @@ getFreq <- function( label, df_in)
   words.freq_tmp<-table(unlist(words_tmp))
   words.freq_tmp = as.data.frame(cbind(names(words.freq_tmp),as.integer(words.freq_tmp)) )
   words.freq_tmp$V2 <- as.numeric(words.freq_tmp$V2)
-  words.freq_tmp$V2 <- words.freq_tmp$V2 / sum(words.freq_tmp$V2)
+  words.freq[is.na(words.freq)] <- 0
+  words.freq_tmp$V2 <- words.freq_tmp$V2 / sum(words.freq_tmp$V2) + 0.5
   words.freq <- merge(x=df_in, y=words.freq_tmp, by ="V1", all.x = TRUE )
   return(words.freq)
 }
