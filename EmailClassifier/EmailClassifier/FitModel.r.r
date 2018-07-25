@@ -2,8 +2,7 @@
 
 
 # get data
-df.emails <- as.data.frame(read.csv("C:\\Users\\Ruedi\\OneDrive\\MS\\OutlookPlugin\\EmailClassifier\\data2.csv"), header=FALSE)
-colnames(df.emails) <- c("class", "from","body")
+df.emails <- as.data.frame(read.csv("C:\\Users\\Ruedi\\OneDrive\\MS\\OutlookPlugin\\EmailClassifier\\data2.csv"), header=TRUE)
 df.emails$body <- tolower(df.emails$body )
 
 
@@ -20,9 +19,9 @@ words.freq<-table(unlist(words))
 words.freq = as.data.frame(cbind(names(words.freq),as.integer(words.freq)) )
 words.freq$V2 <- as.numeric(words.freq$V2)
 
-getFreq <- function( class, df_in)
+getFreq <- function( label, df_in)
 {
-  classEmails <- df.emails[ df.emails$class == class, ]
+  classEmails <- df.emails[ df.emails$class == label, ]
   words_tmp <- c()
   for ( body in classEmails$body)
   {
@@ -45,4 +44,3 @@ words.freq[is.na(words.freq)] <- 1
 
 write.csv(x = words.freq, file = "C:\\Users\\Ruedi\\OneDrive\\MS\\OutlookPlugin\\EmailClassifier\\pamramters.csv", row.names = FALSE)
 
-Sys.sleep(10)
