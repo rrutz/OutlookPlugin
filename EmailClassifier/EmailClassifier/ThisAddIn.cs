@@ -21,12 +21,7 @@ namespace EmailClassifier
             thisExplorer.SelectionChange += new Microsoft.Office.Interop.Outlook.ExplorerEvents_10_SelectionChangeEventHandler(Access_All_Form_Regions);
         }
 
-        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
-        {
-            // Note: Outlook no longer raises this event. If you have code that 
-            //    must run when Outlook shuts down, see https://go.microsoft.com/fwlink/?LinkId=506785
-        }
-
+        // Writes email information to a csv file
         public void writeToFile(string label)
         { 
             if (this.Application.ActiveExplorer().Selection.Count > 0)
@@ -40,35 +35,25 @@ namespace EmailClassifier
                     String cc = mailItem.CC;
                     String subject = mailItem.Subject;
                     String body = mailItem.Body;
-
-                    if( Console.WriteLine(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv"))
-                    {
-                        using (TextWriter writer = new StreamWriter(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv", append: true))
-                        {
-                            var csv = new CsvWriter(writer);
-                            var list = new List<string[]>
-                            {
-                                new[] { "label", "from", "to", "cc", "subject", "body" },
-                            };
-                            foreach (var item in list)
-                            {
-                                foreach (var field in item)
-                                {
-                                    csv.WriteField(field);
-                                }
-                                csv.NextRecord();
-                            }
-                            writer.Flush();
-                        }
-                    }
                        
                     using (TextWriter writer = new StreamWriter(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv", append: true))
                     {
                         var csv = new CsvWriter(writer);
-                        var list = new List<string[]>
+                        if( Console.WriteLine(@"C:\Users\Ruedi\OneDrive\MS\OutlookPlugin\EmailClassifier\data2.csv"))
                         {
-                            new[] { label, from, to, cc, subject, body },
-                        };
+                            var list = new List<string[]>
+                            {
+                                new[] { "label", "from", "to", "cc", "subject", "body" },
+                                new[] { label, from, to, cc, subject, body },
+                            };
+                        }
+                        else
+                        {
+                            var list = new List<string[]>
+                            {
+                                new[] { label, from, to, cc, subject, body },
+                            };
+                        }
                         foreach (var item in list)
                         {
                             foreach (var field in item)
@@ -83,8 +68,7 @@ namespace EmailClassifier
             }
         }
 
-
-
+        // pulls email information and thne calls R script which returns the predicition
         public string classifyEmail(string rCodeFilePath, string rScriptExecutablePath)
         {
             if (this.Application.ActiveExplorer().Selection.Count > 0)
@@ -122,6 +106,7 @@ namespace EmailClassifier
             return "error";
         }
 
+        // do I still need this????
         private void Access_All_Form_Regions()
         {
             foreach (Microsoft.Office.Tools.Outlook.IFormRegion formRegion in Globals.FormRegions)
