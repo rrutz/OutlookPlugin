@@ -1,0 +1,17 @@
+while( TRUE )
+{
+  while( !file.exists("C:\\Users\\ruedir\\Source\\Repos\\EmailClassifer\\EmailClassifer\\signal.txt") )
+  {
+    Sys.sleep(0.001)
+  }
+
+    p <- predict()
+    write.table(p, file="C:\\Users\\ruedir\\Source\\Repos\\EmailClassifer\\EmailClassifer\\Prediction.txt", row.names = FALSE, col.names = FALSE, quote=FALSE)
+
+  while(file.exists("C:\\Users\\ruedir\\Source\\Repos\\EmailClassifer\\EmailClassifer\\signal.txt"))
+  {
+    Sys.sleep(0.001)
+  }
+  
+
+}
