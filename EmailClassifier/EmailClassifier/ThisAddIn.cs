@@ -17,10 +17,30 @@ namespace EmailClassifier
    
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            Thread th = new Thread(startPredictionScript);
+            th.Start();
             thisExplorer = this.Application.ActiveExplorer();
             thisExplorer.SelectionChange += new Microsoft.Office.Interop.Outlook.ExplorerEvents_10_SelectionChangeEventHandler(Access_All_Form_Regions);
         }
+        
+        private void startPredictionScript()
+        {
+            var info = new ProcessStartInfo();
+            info.Arguments = predictScriptPath;
+            info.FileName = this.RscriptExe;
+            info.WorkingDirectory = Path.GetDirectoryName(predictScriptPath);
+            info.RedirectStandardInput = false;
+            info.RedirectStandardOutput = true;
+            info.UseShellExecute = false;
+            info.CreateNoWindow = true;
 
+            using (var proc = new Process())
+            {
+                proc.StartInfo = info;
+                proc.Start();
+                //string result = proc.StandardOutput.ReadToEnd(); 
+            }
+        }
         // Writes email information to a csv file
         public void writeToFile(string label)
         { 
@@ -68,6 +88,52 @@ namespace EmailClassifier
             }
         }
 
+        
+        private bool IsFileLocked()
+        {
+            try
+            {
+                string prediction = File.ReadAllText(@"C:\Users\ruedir\Source\Repos\EmailClassifer\EmailClassifer\Prediction.txt");
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        // pulls email information and thne calls R script which returns the predicition
+        public string classifyEmail()
+        {
+            if (this.Application.ActiveExplorer().Selection.Count > 0)
+            {
+                Object selObject = this.Application.ActiveExplorer().Selection[1];
+                if (selObject is Outlook.MailItem)
+                {
+                    Outlook.MailItem mailItem = (selObject as Outlook.MailItem);
+                    String from = mailItem.SenderName;
+                    String to = mailItem.To;
+                    String cc = mailItem.CC;
+                    String subject = mailItem.Subject;
+                    String body = mailItem.Body;
+                }
+
+                File.WriteAllText(@"C:\Users\ruedir\Source\Repos\EmailClassifer\EmailClassifer\signal.txt", "1");
+
+                while(!File.Exists(@"C:\Users\ruedir\Source\Repos\EmailClassifer\EmailClassifer\Prediction.txt")) { System.Threading.Thread.Sleep(1);  }      
+                while(IsFileLocked()) { System.Threading.Thread.Sleep(1);  }
+
+                string prediction = File.ReadAllText(@"C:\Users\ruedir\Source\Repos\EmailClassifer\EmailClassifer\Prediction.txt");
+                prediction = prediction.Replace("\r\n", "");
+                File.Delete(@"C:\Users\ruedir\Source\Repos\EmailClassifer\EmailClassifer\Prediction.txt");
+                File.Delete(@"C:\Users\ruedir\Source\Repos\EmailClassifer\EmailClassifer\signal.txt"); 
+                return prediction;
+            }
+            return "error";
+        }
+        
+        
         // pulls email information and thne calls R script which returns the predicition
         public string classifyEmail(string rCodeFilePath, string rScriptExecutablePath)
         {
